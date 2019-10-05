@@ -7,34 +7,63 @@ const { buildSchema } = require('graphql');
 
 const app = express();
 
+const events  = [];
+
 app.use(bodyParser.json());
 
+
+//? Float adds a decimal number 2.0 not just a single number
 app.use('/graphql', graphqlHTTP({
     schema: buildSchema(`
-        type RootQuery {
-            events: [String!]!
-        }
+            type Event {
+                _id: ID!
+                title: String!
+                description: String!
+                price: Float!
+                date: String!
+            }
 
-        type RootMutation {
-            createEvenet(name: String!): String
-        }
+            input EventInput {
+                title: String!
+                description: String!
+                price: Float!
+                date: String!
+            }
 
-        schema {
-            query: RootQuery
-            mutation: RootMutation
-        }
-    `),
-    rootValue: {
-        events: () => { // ! this is a resolver
-            return ['Romantic Cooking', 'Sailing', 'All Night Coding']
+            type RootQuery {
+                events: [Event!]!
+            }
+
+            type RootMutation {
+                createEvent(eventInput: EventInput): Event
+            }
+
+            schema {
+                query: RootQuery
+                mutation: RootMutation
+            }
+        `),
+        rootValue: {
+            // ! this is a resolver
+            events: () => {
+                return events;
+            },
+            createEvent: (args) => {
+                const event = {
+                    _id: Math.random().toString(),
+                    title: args.eventInput.title,
+                    description: args.eventInput.description,
+                    price: +args.eventInput.price,
+                    date: new Date().toISOString()
+                }
+            
+            events.push(event);
+            return event;
+            }
         },
-        createEvenet: (args) => {
-            const eventName = args.name;
-            return eventName;
-        }
-    },
-    graphiql: true
-}));
+        graphiql: true
+    })
+);
 // ? resovlers/ rootValue funtion needs to match our schema by name
 
 
