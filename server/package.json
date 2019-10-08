@@ -1,7 +1,7 @@
 {
-  "name": "server",
+  "name": "eventbookingserver",
   "version": "1.0.0",
-  "description": "",
+  "description": "Event Booking API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +9,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
@@ -19,5 +20,8 @@
     "graphql": "^14.5.8",
     "mongoose": "^5.7.3",
     "morgan": "^1.9.1"
+  },
+  "repository": {
+    "url": "https://github.com/kingdavidigbayilola/Event-Booking-App.git"
   }
 }
