@@ -19,5 +19,6 @@ const userSchema = new Schema({
     ]
 });
 
+// ! refrence only hold the ID of the data
 
 module.exports = mongoose.model('User', userSchema);
