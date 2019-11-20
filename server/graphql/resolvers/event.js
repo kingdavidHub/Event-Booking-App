@@ -1,4 +1,5 @@
 const Event = require('../../models/event');
+const User = require('../../models/user');
 const { dateToString } = require('../../helpers/date');
 const { transformedEvent } = require('./mergeData');
 
@@ -16,14 +17,17 @@ module.exports = {
         }
     },
 
-    // * MUTATION
-    createEvent: async args => {
+    // * MUTATION //! Getting acces of our req.Header()
+    createEvent: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error('Unauthenticated'); //! getting it from the isAuth() middleware
+        }
         const event = new Event({
             title: args.eventInput.title,
             description: args.eventInput.description,
             price: +args.eventInput.price,
             date: dateToString(args.eventInput.date),
-            creator: '5d9bd43cc222572578a74147'
+            creator: req.userId
         });
 
         let createdEvent;
@@ -31,7 +35,7 @@ module.exports = {
             const result = await event.save();
             createdEvent = transformedEvent(result);
 
-            const creator = await User.findById('5d9bd43cc222572578a74147');
+            const creator = await User.findById(req.userId);
             if (!creator) {
                 throw new Error('User not found.');
             }

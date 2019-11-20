@@ -2,6 +2,26 @@ const Event = require('../../models/event');
 const User = require('../../models/user');
 const { dateToString } = require('../../helpers/date');
 
+const transformedEvent = event => {
+    return {
+        ...event._doc,
+        _id: event.id,
+        date: dateToString(event._doc.date),
+        creator: user.bind(this, event.creator)
+    };
+};
+
+const transformedBooking = booking => {
+    return {
+        ...booking._doc,
+        user: user.bind(this, booking._doc.user),
+        event: singleEvent.bind(this, booking._doc.event),
+        createdAt: dateToString(booking._doc.createdAt),
+        updatedAt: dateToString((booking._doc.updatedAt))
+    }
+};
+
+
 const events = async (eventIds) => {
     try {
         // * $in ## finds all the id in the array documnet
@@ -35,24 +55,6 @@ const singleEvent = async eventId => {
     }
 };
 
-const transformedEvent = event => {
-    return {
-        ...event._doc,
-        _id: event.id,
-        date: dateToString(event._doc.date),
-        creator: user.bind(this, event.creator)
-    };
-};
-
-const transformedBooking = booking => {
-    return {
-        ...booking._doc,
-        user: user.bind(this, booking._doc.user),
-        event: singleEvent.bind(this, booking._doc.event),
-        createdAt: dateToString(booking._doc.createdAt),
-        updatedAt: dateToString((booking._doc.updatedAt))
-    }
-};
 
 exports.transformedBooking = transformedBooking;
 exports.transformedEvent = transformedEvent;
