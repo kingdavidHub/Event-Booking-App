@@ -7,7 +7,7 @@ import BookingsPage from './pages/Bookings';
 import EventsPage from './pages/Event';
 
 
-import './App.css'
+import './App.css';
 
 class App extends Component {
   render() {
